@@ -73,9 +73,9 @@ namespace Drive.WebAPI.Controllers
                 return NotFound();
             }
 
-            var vehicleModelViewModels = _mapper.Map<VehicleModelViewModel>(vehicleModel);
+           VehicleModelViewModel vehicleModelViewModel = _mapper.Map<VehicleModelViewModel>(vehicleModel);
 
-            return Ok(vehicleModelViewModels);
+            return Ok(vehicleModelViewModel);
         }
 
 

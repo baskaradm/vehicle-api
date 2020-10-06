@@ -1,24 +1,22 @@
 ﻿using Drive.Model.Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace Drive.Model
+namespace Drive.DAL
 {
-    public class VehicleModel : IVehicleModel
+    public class VehicleModelEntity
     {
+        [Key]
         public int ID { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        
         public string Abbreviation { get; set; }
-       
+
         public int VehicleMakeId { get; set; }
 
-        
-       
 
+        public IVehicleMake VehicleMake { get; set; }
     }
 }

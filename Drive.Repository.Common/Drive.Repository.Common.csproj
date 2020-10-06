@@ -46,12 +46,18 @@
   <ItemGroup>
     <Compile Include="IGenericRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="IVehicleMakeRepository.cs" />
+    <Compile Include="IVehicleModelRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drive.Common\Drive.Common.csproj">
       <Project>{09549a22-65a7-4bf6-8f24-e221e89399a8}</Project>
       <Name>Drive.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drive.Model.Common\Drive.Model.Common.csproj">
+      <Project>{5492213E-3E4A-4E29-A08C-84A69B9A8F4A}</Project>
+      <Name>Drive.Model.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Drive.Model\Drive.Model.csproj">
       <Project>{072FDF51-6D41-4834-B4A5-08A44660F0FA}</Project>

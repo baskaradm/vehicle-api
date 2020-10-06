@@ -9,51 +9,19 @@ namespace Drive.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DriveContext _context;
-        private IGenericRepository<VehicleMake> _vehicleMakeRepository;
-        private IGenericRepository<VehicleModel> _vehicleModelRepository;
+        
 
-        public UnitOfWork(DriveContext context, IGenericRepository<VehicleMake> vehicleMakeRepository, IGenericRepository<VehicleModel> vehicleModelRepository)
+        public UnitOfWork(DriveContext context)
         {
             _context = context;
-            _vehicleMakeRepository = vehicleMakeRepository;
-            _vehicleModelRepository = vehicleModelRepository;
+            
 
         }
 
 
-        public IGenericRepository<VehicleMake> VehicleMakes
+        public async Task SaveChangesAsync()
         {
-            get
-            {
-                if (_vehicleMakeRepository == null)
-                {
-                    _vehicleMakeRepository = new GenericRepository<VehicleMake>(_context);
-                }
-                return _vehicleMakeRepository;
-            }
-        }
-
-        public IGenericRepository<VehicleModel> VehicleModels
-        {
-            get
-            {
-                if (_vehicleModelRepository == null)
-                {
-                    _vehicleModelRepository = new GenericRepository<VehicleModel>(_context);
-                }
-                return _vehicleModelRepository;
-            }
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            int result = 0;
-            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                result = await _context.SaveChangesAsync();
-                scope.Complete();
-            }
-            return result;
+            await _context.SaveChangesAsync();
         }
        
         private bool disposed = false;

@@ -44,6 +44,8 @@ namespace Drive.WebAPI.App_Start
                 .As<IMapper>()
                 .InstancePerLifetimeScope();
 
+         
+
         }
     }
 }

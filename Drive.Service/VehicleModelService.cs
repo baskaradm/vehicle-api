@@ -14,79 +14,35 @@ namespace Drive.Service
     public class VehicleModelService : IVehicleModelService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IVehicleModelRepository _vehicleModelRepository;
 
-        public VehicleModelService(IUnitOfWork unitOfWork)
+        public VehicleModelService(IUnitOfWork unitOfWork, IVehicleModelRepository vehicleModelRepository)
         {
             _unitOfWork = unitOfWork;
+            _vehicleModelRepository = vehicleModelRepository;
         }
 
         public async Task<IEnumerable<IVehicleModel>> GetVehicleModelsAsync(Filtering filters, Sorting sorting, Paging paging)
         {
-            Func<IQueryable<VehicleModel>, IOrderedQueryable<VehicleModel>> sortBy = null;
-            Expression<Func<VehicleModel, bool>> filter = null;
+           IEnumerable<IVehicleModel> query = await _vehicleModelRepository.GetAll(filters, sorting, paging);
+            
 
-            if (filters.ShouldApplyFilters())
-            {
-                filter = (v => v.Name.Contains(filters.FilterBy)
-                                    || v.Abbreviation.Contains(filters.FilterBy)
-                                    || v.VehicleMakeId.ToString().Contains(filters.FilterBy));
-            }
-
-
-            switch (sorting.SortBy)
-            {
-                case "name_desc":
-                    sortBy = q => q.OrderByDescending(v => v.Name);
-                    break;
-
-                case "abrv":
-                    sortBy = q => q.OrderBy(v => v.Abbreviation);
-                    break;
-
-                case "abrv_desc":
-                    sortBy = q => q.OrderByDescending(v => v.Abbreviation);
-                    break;
-
-               
-                    
-                case "VehicleMakeId":
-                    sortBy = q => q.OrderBy(v => v.VehicleMakeId);
-                    break;
-
-                case "VehicleMakeId_desc":
-                    sortBy = q => q.OrderByDescending(v => v.VehicleMakeId);
-                    break;
-
-                default:
-                    sortBy = q => q.OrderBy(v => v.Name);
-                    break;
-            }
-
-            IQueryable<IVehicleModel> query = await _unitOfWork.VehicleModels.GetAll(filter: filter, orderBy: sortBy);
-            paging.TotalCount = query.Count();
-
-            return query.Skip(paging.ItemsToSkip).Take(paging.NumberOfObjectsPerPage).ToList();
+            return query.ToList();
         }
 
         public async Task<IVehicleModel> GetVehicleModelByIDAsync(object id)
         {
-            return await _unitOfWork.VehicleModels.FindById(id);
+            return await _vehicleModelRepository.FindById(id);
         }
 
 
         public async Task<bool> CreateVehicleModel(IVehicleModel vehicleModel)
         {
-            VehicleModel vehicleModelToCreate = new VehicleModel
-            {
-                Name = vehicleModel.Name,
-                Abbreviation = vehicleModel.Abbreviation,
-                VehicleMakeId = vehicleModel.VehicleMakeId,
-                ID = vehicleModel.ID
-            };
+           
 
             try
             {
-                await _unitOfWork.VehicleModels.Create(vehicleModelToCreate);
+                await _vehicleModelRepository.Create(vehicleModel);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
@@ -99,17 +55,10 @@ namespace Drive.Service
 
         public async Task<bool> EditVehicleModel(IVehicleModel vehicleModel)
         {
-            VehicleModel vehicleModelToUpdate = new VehicleModel
-            {
-                Name = vehicleModel.Name,
-                Abbreviation = vehicleModel.Abbreviation,
-                VehicleMakeId = vehicleModel.VehicleMakeId,
-                ID = vehicleModel.ID
-
-            };
+            
             try
             {
-                await _unitOfWork.VehicleModels.Edit(vehicleModelToUpdate);
+                await _vehicleModelRepository.Edit(vehicleModel);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
@@ -124,7 +73,7 @@ namespace Drive.Service
         {
             try
             {
-                await _unitOfWork.VehicleModels.Delete(id);
+                await _vehicleModelRepository.Delete(id);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;

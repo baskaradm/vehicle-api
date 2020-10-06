@@ -5,6 +5,7 @@ using Drive.Model.Common;
 using Drive.Service.Common;
 using Drive.WebAPI.ViewModels;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -17,7 +18,6 @@ namespace Drive.WebAPI.Controllers
 
         private readonly IVehicleMakeService _vehicleMakeService;
         private readonly IMapper _mapper;
-
 
 
         public VehicleMakeController(IVehicleMakeService vehicleMakeService, IMapper mapper)
@@ -75,7 +75,7 @@ namespace Drive.WebAPI.Controllers
                 return NotFound();
             }
 
-            var vehicleMakeViewModels = _mapper.Map<VehicleMakeViewModel>(vehicleMake);
+            VehicleMakeViewModel vehicleMakeViewModels = _mapper.Map<VehicleMakeViewModel>(vehicleMake);
 
             return Ok(vehicleMakeViewModels);
         }
@@ -84,23 +84,23 @@ namespace Drive.WebAPI.Controllers
        
         [ResponseType(typeof(VehicleMakeViewModel))]
         [HttpPost]
-        public async Task<IHttpActionResult> CreateVehicleMake(VehicleMake vehicleMakeToInsert)
+        public async Task<IHttpActionResult> CreateVehicleMake(VehicleMakeViewModel vehicleMakeViewModel)
         {
-
+            // map from viewmodel
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            await _vehicleMakeService.CreateVehicleMake(vehicleMakeToInsert);
+            VehicleMake vehicleMake = _mapper.Map<VehicleMake>(vehicleMakeViewModel);
+            await _vehicleMakeService.CreateVehicleMake(vehicleMake);
             
-           VehicleMakeViewModel vehicleMakeViewModels = _mapper.Map<VehicleMakeViewModel> (vehicleMakeToInsert);
+     
 
             
 
             return CreatedAtRoute("DefaultApi",
-                                            new { id = vehicleMakeViewModels.VehicleMakeId }, vehicleMakeViewModels);
+                                            new { id = vehicleMakeViewModel.VehicleMakeId }, vehicleMakeViewModel);
 
         }
 
@@ -108,21 +108,21 @@ namespace Drive.WebAPI.Controllers
 
         [ResponseType(typeof(VehicleMakeViewModel))]
         [HttpPut]
-        public async Task<IHttpActionResult> PutVehicleMake(int id, VehicleMake vehicleMake)
+        public async Task<IHttpActionResult> PutVehicleMake(int id, VehicleMakeViewModel vehicleMakeViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (id != vehicleMake.VehicleMakeId)
+            if (id != vehicleMakeViewModel.VehicleMakeId)
             {
                 return BadRequest();
             }
-
+            VehicleMake vehicleMake = _mapper.Map<VehicleMake>(vehicleMakeViewModel);
             await _vehicleMakeService.EditVehicleMake(vehicleMake);
-            VehicleMakeViewModel vehicleMakeViewModels = _mapper.Map<VehicleMakeViewModel>(vehicleMake);
+            
            
-                return Ok(vehicleMakeViewModels);
+                return Ok(vehicleMakeViewModel);
             
             
 
@@ -146,17 +146,12 @@ namespace Drive.WebAPI.Controllers
 
             await _vehicleMakeService.DeleteVehicleMake(id);
 
-            VehicleMakeViewModel vehicleMakeViewModels = _mapper.Map<VehicleMakeViewModel>(vehicleMake);
-            return Ok(vehicleMakeViewModels);
+            return StatusCode(HttpStatusCode.NoContent);
 
 
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            _vehicleMakeService.Dispose();
-            base.Dispose(disposing);
-        }
+       
 
 
 

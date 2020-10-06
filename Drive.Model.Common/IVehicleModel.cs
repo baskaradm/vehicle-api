@@ -6,6 +6,6 @@
         string Name { get; set; }
         string Abbreviation { get; set; }
         int VehicleMakeId { get; set; }
-        IVehicleMake VehicleMake { get; set; }
+        
     }
 }

@@ -1,5 +1,4 @@
-﻿using Drive.Model;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Diagnostics;
 
@@ -13,8 +12,8 @@ namespace Drive.DAL
 
         }
 
-        public DbSet<VehicleMake>VehicleMakes { get; set; }
-        public DbSet<VehicleModel> VehicleModels { get; set; }
+        public DbSet<VehicleMakeEntity>VehicleMakes { get; set; }
+        public DbSet<VehicleModelEntity> VehicleModels { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

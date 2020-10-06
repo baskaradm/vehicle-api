@@ -1,10 +1,10 @@
-﻿using Drive.DAL;
+﻿using Drive.Common.Helpers;
+using Drive.DAL;
 using Drive.Repository.Common;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Drive.Repository
@@ -23,45 +23,16 @@ namespace Drive.Repository
         }
 
 
-        public async Task<IQueryable<T>> GetAll
-            (Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "")
-        {
-            IQueryable<T> query = dbSet;
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-
-
-
-            if (orderBy != null)
-            {
-                return orderBy(query);
-            }
-            else
-            {
-                return query;
-            }
+        public virtual async Task<IEnumerable<T>> GetAll(Filtering filters, Sorting sorting, Paging paging) {
+            return await dbSet.ToListAsync();
         }
 
-        public async Task<T> FindById(object id)
+        public virtual async Task<T> FindById(object id)
         {
             return await dbSet.FindAsync(id);
         }
 
-        public async Task<bool> Create(T entity)
+        public virtual async Task<bool> Create(T entity)
         {
             try
             {
@@ -75,7 +46,7 @@ namespace Drive.Repository
             }
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             try
             {
@@ -96,7 +67,7 @@ namespace Drive.Repository
             }
         }
 
-        public async Task<bool> Delete(object id)
+        public virtual async Task<bool> Delete(object id)
         {
             try
             {
@@ -112,7 +83,7 @@ namespace Drive.Repository
         }
 
 
-        public async Task<bool> Edit(T entity)
+        public virtual async Task<bool> Edit(T entity)
         {
             try
             {

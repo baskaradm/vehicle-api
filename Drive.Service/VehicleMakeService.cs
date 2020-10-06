@@ -14,65 +14,37 @@ namespace Drive.Service
     public class VehicleMakeService : IVehicleMakeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IVehicleMakeRepository _vehicleMakeRepository;
 
-        public VehicleMakeService(IUnitOfWork unitOfWork)
+        public VehicleMakeService(IUnitOfWork unitOfWork,  IVehicleMakeRepository vehicleMakeRepository)
         {
             _unitOfWork = unitOfWork;
+            _vehicleMakeRepository = vehicleMakeRepository;
         }
 
         public async Task<IEnumerable<IVehicleMake>> GetVehicleMakes(Filtering filters, Sorting sorting, Paging paging)
         {
-            Func<IQueryable<VehicleMake>, IOrderedQueryable<VehicleMake>> sortBy = null;
-            Expression<Func<VehicleMake, bool>> filter = null;
+            
 
-            if (filters.ShouldApplyFilters())
-            {
-                filter = (v => v.Name.Contains(filters.FilterBy) || v.Abbreviation.Contains(filters.FilterBy));
-            }
+           
 
-            switch (sorting.SortBy)
-            {
-                case "name_desc":
-                    sortBy = q => q.OrderByDescending(v => v.Name);
-                    break;
-
-                case "abrv":
-                    sortBy = q => q.OrderBy(v => v.Abbreviation);
-                    break;
-
-                case "abrv_desc":
-                    sortBy = q => q.OrderByDescending(v => v.Abbreviation);
-                    break;
-
-                default:
-                    sortBy = q => q.OrderBy(v => v.Name);
-                    break;
-            }
-
-            IQueryable<IVehicleMake> query = await _unitOfWork.VehicleMakes.GetAll(filter: filter, orderBy: sortBy);
-            paging.TotalCount = query.Count();
-
-            return query.Skip(paging.ItemsToSkip).Take(paging.NumberOfObjectsPerPage).ToList();
+            IEnumerable<IVehicleMake> query = await _vehicleMakeRepository.GetAll(filters, sorting, paging);
+           
+            return query.ToList();
         }
 
         public async Task<IVehicleMake> GetVehicleMakeByID(object id)
         {
-            return await _unitOfWork.VehicleMakes.FindById(id);
+            return await _vehicleMakeRepository.FindById(id);
         }
 
 
         public async Task<bool> CreateVehicleMake(IVehicleMake vehicleMake)
         {
-            VehicleMake vehicleMakeToCreate = new VehicleMake
-            {
-                VehicleMakeId = vehicleMake.VehicleMakeId,
-                Name = vehicleMake.Name,
-                Abbreviation = vehicleMake.Abbreviation
-            };
                
             try
             {
-                await _unitOfWork.VehicleMakes.Create(vehicleMakeToCreate);
+                await _vehicleMakeRepository.Create(vehicleMake);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
@@ -85,16 +57,10 @@ namespace Drive.Service
 
         public async Task<bool> EditVehicleMake(IVehicleMake vehicleMake)
         {
-            VehicleMake vehicleMakeToUpdate = new VehicleMake
-            {
-                VehicleMakeId = vehicleMake.VehicleMakeId,
-                Name = vehicleMake.Name,
-                Abbreviation = vehicleMake.Abbreviation
-                
-            };
+           
             try
             {
-                await _unitOfWork.VehicleMakes.Edit(vehicleMakeToUpdate);
+                await _vehicleMakeRepository.Edit(vehicleMake);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;
@@ -109,7 +75,7 @@ namespace Drive.Service
         {
             try
             {
-                await _unitOfWork.VehicleMakes.Delete(id);
+                await _vehicleMakeRepository.Delete(id);
                 await _unitOfWork.SaveChangesAsync();
 
                 return true;

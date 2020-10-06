@@ -7,13 +7,13 @@ namespace Drive.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class _InitalCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(_InitalCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "202008180821327_Initial"; }
+            get { return "202010060855011__InitalCreate"; }
         }
         
         string IMigrationMetadata.Source

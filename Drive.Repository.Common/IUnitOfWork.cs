@@ -9,9 +9,8 @@ namespace Drive.Repository.Common
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<VehicleMake>VehicleMakes { get; }
-        IGenericRepository<VehicleModel> VehicleModels { get; }
-        Task <int> SaveChangesAsync();
+        
+        Task  SaveChangesAsync();
         new void Dispose();
         
     }

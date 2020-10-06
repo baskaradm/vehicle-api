@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Drive.DAL;
 using Drive.Model;
 using Drive.WebAPI.ViewModels;
 
@@ -15,6 +16,8 @@ namespace Drive.WebAPI.App_Start
 
             CreateMap<VehicleMake, VehicleMakeViewModel>().ReverseMap();
             CreateMap<VehicleModel, VehicleModelViewModel>().ReverseMap();
+            CreateMap<VehicleMake, VehicleMakeEntity>().ReverseMap();
+            CreateMap<VehicleModel, VehicleModelEntity>().ReverseMap();
         }
 
     }
