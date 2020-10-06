@@ -55,11 +55,11 @@ namespace Drive.Repository
                     models = models.OrderByDescending(v => v.Abbreviation);
                     break;
 
-                case "MakeId":
+                case "VehicleMakeId":
                     models = models.OrderBy(v => v.VehicleMakeId);
                     break;
 
-                case "makeid_desc":
+                case "vehiclemakeid_desc":
                     models = models.OrderByDescending(v => v.VehicleMakeId);
                     break;
 
