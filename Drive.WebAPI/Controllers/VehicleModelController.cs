@@ -5,6 +5,7 @@ using Drive.Model.Common;
 using Drive.Service.Common;
 using Drive.WebAPI.ViewModels;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -149,18 +150,11 @@ namespace Drive.WebAPI.Controllers
             }
 
             await _vehicleModelService.DeleteVehicleModel(id);
-
-            VehicleModelViewModel vehicleModelViewModels = _mapper.Map<VehicleModelViewModel>(vehicleModel);
-            return Ok(vehicleModelViewModels);
-
+            return StatusCode(HttpStatusCode.NoContent);
 
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            _vehicleModelService.Dispose();
-            base.Dispose(disposing);
-        }
+     
 
 
 

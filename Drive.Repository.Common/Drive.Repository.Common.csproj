@@ -55,6 +55,10 @@
       <Project>{09549a22-65a7-4bf6-8f24-e221e89399a8}</Project>
       <Name>Drive.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Drive.DAL\Drive.DAL.csproj">
+      <Project>{1319AC4D-D01C-4E68-A042-79E3347B04B1}</Project>
+      <Name>Drive.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Drive.Model.Common\Drive.Model.Common.csproj">
       <Project>{5492213E-3E4A-4E29-A08C-84A69B9A8F4A}</Project>
       <Name>Drive.Model.Common</Name>

@@ -122,13 +122,13 @@ namespace Drive.Repository
                 throw;
             }
         }
-        public async Task<bool> Delete(object id)
+        public  override async Task<bool> Delete(object id)
         {
             try
             {
 
                 VehicleMakeEntity entity = await dbSet.FindAsync(id);
-                await Delete(entity);
+                 Delete(entity);
                 return true;
             }
             catch

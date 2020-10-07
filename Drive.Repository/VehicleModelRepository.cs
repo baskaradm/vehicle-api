@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Drive.Repository
@@ -127,12 +126,12 @@ namespace Drive.Repository
                 throw;
             }
         }
-        public async Task<bool> Delete(object id)
+        public override async Task<bool> Delete(object id)
         {
             try
             {
                 VehicleModelEntity entity = await dbSet.FindAsync(id);
-                await Delete(entity);
+                 Delete(entity);
                 return true;
             }
             catch

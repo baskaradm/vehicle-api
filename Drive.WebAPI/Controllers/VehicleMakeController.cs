@@ -146,6 +146,7 @@ namespace Drive.WebAPI.Controllers
 
             await _vehicleMakeService.DeleteVehicleMake(id);
 
+
             return StatusCode(HttpStatusCode.NoContent);
 
 
