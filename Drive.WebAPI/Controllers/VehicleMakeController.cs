@@ -86,7 +86,7 @@ namespace Drive.WebAPI.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> CreateVehicleMake(VehicleMakeViewModel vehicleMakeViewModel)
         {
-            // map from viewmodel
+            
 
             if (!ModelState.IsValid)
             {
@@ -130,7 +130,6 @@ namespace Drive.WebAPI.Controllers
         }
 
 
-        [ResponseType(typeof(VehicleMakeViewModel))]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteVehicleMake(int id)
         {
@@ -146,7 +145,7 @@ namespace Drive.WebAPI.Controllers
 
             await _vehicleMakeService.DeleteVehicleMake(id);
 
-
+           
             return StatusCode(HttpStatusCode.NoContent);
 
 

@@ -82,7 +82,7 @@ namespace Drive.WebAPI.Controllers
 
 
         [ResponseType(typeof(VehicleModelViewModel))]
-        public async Task<IHttpActionResult> CreateVehicleModel(VehicleModel vehicleModelToInsert)
+        public async Task<IHttpActionResult> CreateVehicleModel(VehicleModelViewModel vehicleModelViewModel)
         {
 
 
@@ -91,14 +91,13 @@ namespace Drive.WebAPI.Controllers
                 return BadRequest("Not a valid model");
             }
 
-            await _vehicleModelService.CreateVehicleModel(vehicleModelToInsert);
 
-            VehicleModelViewModel vehicleModelViewModels = _mapper.Map<VehicleModelViewModel>(vehicleModelToInsert);
+            VehicleModel vehicleModel = _mapper.Map<VehicleModel>(vehicleModelViewModel);
 
-
+            await _vehicleModelService.CreateVehicleModel(vehicleModel);
 
             return CreatedAtRoute("DefaultApi",
-                                            new { id = vehicleModelViewModels.ID }, vehicleModelViewModels);
+                                            new { id = vehicleModelViewModel.ID }, vehicleModelViewModel);
 
         }
 
@@ -106,34 +105,28 @@ namespace Drive.WebAPI.Controllers
 
 
         [ResponseType(typeof(VehicleMakeViewModel))]
-        public async Task<IHttpActionResult> PutVehicleModel(int id, VehicleModel vehicleModel)
+        public async Task<IHttpActionResult> PutVehicleModel(int id, VehicleModelViewModel vehicleModelViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Not a valid data");
             }
-            if (id != vehicleModel.ID)
+            if (id != vehicleModelViewModel.ID)
             {
                 return BadRequest();
             }
 
-            var vehicleisUpdated = await _vehicleModelService.EditVehicleModel(vehicleModel);
-            VehicleModelViewModel vehicleModelViewModels = _mapper.Map<VehicleModelViewModel>(vehicleModel);
-            if (vehicleisUpdated == true)
-            {
+            VehicleModel vehicleModel = _mapper.Map<VehicleModel>(vehicleModelViewModel);
+            await _vehicleModelService.EditVehicleModel(vehicleModel);
 
-                return Ok(vehicleModelViewModels);
-            }
-            else
-            {
-                return BadRequest();
-            }
+
+            return Ok(vehicleModelViewModel);
 
 
         }
 
 
-        [ResponseType(typeof(VehicleMakeViewModel))]
+        
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteVehicleModel(int id)
         {
